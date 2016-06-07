@@ -21,6 +21,14 @@ public class Validate {
         if (ipAddress == null || ipAddress.trim().isEmpty()) {
             throw new DataInvalidException("Invalid IP Address!");
         }
+        
+        String[] ipSplit = ipAddress.split("\\.");
+        
+        for (String octet : ipSplit) {
+            if (Integer.parseInt(octet) > 255) {
+                throw new DataInvalidException("Invalid IP Address!");
+            }
+        }
     }
     
     /**
@@ -32,6 +40,14 @@ public class Validate {
     public static void isMaskValid(String maskAddress) throws DataInvalidException {
         if (maskAddress == null || maskAddress.trim().isEmpty()) {
             throw new DataInvalidException("Invalid Maks Address!");
+        }
+        
+        String[] maskSplit = maskAddress.split("\\.");
+        
+        for (String octet : maskSplit) {
+            if (Integer.parseInt(octet) > 255) {
+                throw new DataInvalidException("Invalid Mask Address!");
+            }
         }
     }
     
