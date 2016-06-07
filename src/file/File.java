@@ -1,6 +1,7 @@
 package file;
 
-import calculator.Calculator;
+import calculator.CalculatorC;
+import calculator.ICalculator;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class File {
      * 
      * @param calculator - calculator.
      */
-    public static void writeFile(Calculator calculator) {
+    public static void writeFile(ICalculator calculator) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.dat"))) {
             oos.writeObject(calculator);
             
@@ -35,11 +36,11 @@ public class File {
      * 
      * @return - calculator.
      */
-    public static Calculator readFile() {
+    public static ICalculator readFile() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.dat"));
             
-            Calculator calculator = (Calculator) (ois.readObject());
+            ICalculator calculator = (ICalculator) (ois.readObject());
             return calculator;
             
         } catch (ClassNotFoundException | IOException ex) {
