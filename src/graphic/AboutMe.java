@@ -29,7 +29,7 @@ public class AboutMe extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
 
         setTitle("About Me");
-        setPreferredSize(new java.awt.Dimension(372, 240));
+        setPreferredSize(new java.awt.Dimension(368, 240));
         setResizable(false);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/graphic/marca-embedded.png"))); // NOI18N
@@ -39,7 +39,7 @@ public class AboutMe extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Hello, my name is Lucas Vieira and I'm the \ncreator of program \"Subnet Calculator\", it\nworks for IPv4 and Network class C.\n\n@Author: Lucas Lima Vieira.\n@Phone: (083) 9 9993-8315.\n@Lab: Embedded Lab.");
+        jTextArea1.setText("Hello, my name is Lucas Vieira and I'm the \ncreator of program \"Subnet Calculator\", it\nworks for IPv4 and all Network class.\n\n@Author: Lucas Lima Vieira.\n@Phone: (083) 9 9993-8315.\n@Lab: Embedded Lab.");
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -1,7 +1,7 @@
 package calculator;
 
+import exceptions.DataInvalidException;
 import java.io.Serializable;
-import validate.Validate;
 
 /**
  * Class that represents a Subnet Calculator for Network class B.
@@ -9,25 +9,17 @@ import validate.Validate;
  * @author Lucas Lima Vieira
  * @version 1.0
  */
-public class CalculatorB implements ICalculator, Serializable {
-
-    private  String ipAddress;
-    private String maskAddress;
+public class CalculatorB extends GeneralCalculator implements ICalculator, Serializable {
 
     /**
      * Constructor of the class CalculatorB.
      * 
      * @param ipAddress - IP Address for calculation.
      * @param maskAddress - Mask Address for calculation.
-     * @throws Exception if datas are invalid.
+     * @throws DataInvalidException if datas are invalid.
      */
-    public CalculatorB(String ipAddress, String maskAddress) throws Exception {
-        
-        Validate.isIpValid(ipAddress);
-        Validate.isMaskValid(maskAddress);
-        
-        this.ipAddress = ipAddress;
-        this.maskAddress = maskAddress;
+    public CalculatorB(String ipAddress, String maskAddress) throws DataInvalidException {
+       super(ipAddress, maskAddress);
     }
     
     /**
@@ -38,8 +30,8 @@ public class CalculatorB implements ICalculator, Serializable {
     @Override
     public String hostRangeCalculate() {
 
-        String firstIp = networkIp() + subnetIDCalculate() + ".1";
-        String lastIp = networkIp() + broadcastCalculate() + ".254";
+        String firstIp = networkIp() + super.subnetIDCalculate() + ".1";
+        String lastIp = networkIp() + super.broadcastCalculate() + ".254";
 
         return firstIp + " - " + lastIp;
     }
@@ -51,7 +43,7 @@ public class CalculatorB implements ICalculator, Serializable {
      */
     @Override
     public String getSubnetID() {
-        return networkIp() + subnetIDCalculate() + ".0";
+        return networkIp() + super.subnetIDCalculate() + ".0";
     }
     
     /**
@@ -61,95 +53,19 @@ public class CalculatorB implements ICalculator, Serializable {
      */
     @Override
     public String getBroadcast() {
-        return networkIp() + broadcastCalculate() + ".255";
+        return networkIp() + super.broadcastCalculate() + ".255";
     }
     
-    /**
-     * This method return ip address.
-     * 
-     * @return ip address.
-     */
-    @Override
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    /**
-     * This method return mask address.
-     * 
-     * @return mask address.
-     */
-    @Override
-    public String getMaskAddress() {
-        return maskAddress;
-    }
-    
-    /**
-     * This method is for calcualte the subnet IP.
-     * 
-     * @return subnet ip.
-     */
-    private int subnetIDCalculate() {
-        
-        int interval = intervalCalculate();
-                
-        if (getLastNumberIP() == getLastNumberMask()) {
-            return getLastNumberIP();
-            
-        } else if (getLastNumberIP() < interval) {
-            return 0;
-            
-        } else if (getLastNumberIP() == interval){
-            return interval;
-            
-        } else if (getLastNumberIP() < getLastNumberMask()) {
-            int value = 0;
-            while (getLastNumberIP() >= value) {
-                value += interval;
-            }
-            return value - interval;
-            
-        } else { // else if (getLastNumberIP() > getLastNumberMask())
-            
-            return interval;
-            /*
-            int value = interval;
-            while (getLastNumberIP() < value ) {
-                value *= 2;
-            }
-            return value;*/
-        }
-    }
-
-    /**
-     * This method is for calculate the broadcast address.
-     * 
-     * @return broadcast address.
-     */
-    private int broadcastCalculate() {
-        int interval = intervalCalculate();
-       
-        int value = interval;
-        while (getLastNumberIP() > value) {
-            value *= 2;
-        }
-        
-        if (getLastNumberMask() > getLastNumberIP() && getLastNumberMask() < value) {
-            return getLastNumberMask() - 1;
-        }
-        
-        return value - 1;
-    }
-
     /**
      * This method is for get the part of ip that 
      * represents the network ip (X.X).
      * 
      * @return network ip.
      */
-    private String networkIp() {
+    @Override
+    protected String networkIp() {
 
-        String[] ipSplit = ipAddress.split("\\.");
+        String[] ipSplit = getIpAddress().split("\\.");
 
         String ip = "";
         int countNumbers = 1;
@@ -167,32 +83,35 @@ public class CalculatorB implements ICalculator, Serializable {
      * 
      * @return interval.
      */
-    private int intervalCalculate() {
+    @Override
+    protected int intervalCalculate() {
 
-        String[] maskSplit = maskAddress.split("\\.");
+        String[] maskSplit = getMaskAddress().split("\\.");
 
         int interval = 256 - Integer.parseInt(maskSplit[2]);
         return interval;
     }
     
     /**
-     * This method return the last number of ip address.
+     * This method return the respective octet number of ip address.
      * 
-     * @return last number ip.
+     * @return octet number ip.
      */
-    private int getLastNumberIP() {
-        String[] ipSplit = ipAddress.split("\\.");
+    @Override
+    protected int getOctetNumberIP() {
+        String[] ipSplit = getIpAddress().split("\\.");
         
         return Integer.parseInt(ipSplit[2]);
     }
     
     /**
-     * This method return the last number of mask address.
+     * This method return the respective octet number of mask address.
      * 
-     * @return last number mask.
+     * @return octet number mask.
      */
-    private int getLastNumberMask() {
-        String[] maskSplit = maskAddress.split("\\.");
+    @Override
+    protected int getOctetNumberMask() {
+        String[] maskSplit = getMaskAddress().split("\\.");
         
         return Integer.parseInt(maskSplit[2]);
     }

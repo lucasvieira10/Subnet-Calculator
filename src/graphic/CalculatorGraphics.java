@@ -3,10 +3,12 @@ package graphic;
 import calculator.CalculatorA;
 import calculator.CalculatorB;
 import calculator.CalculatorC;
-import calculator.ICalculator;
-import com.sun.glass.events.MouseEvent;
 import file.File;
 import util.DigitLimit;
+import calculator.ICalculator;
+import exceptions.DataInvalidException;
+import exceptions.NetworkClassInvalidException;
+import validate.Validate;
 
 /**
  * This class is the graphic interface of all program.
@@ -56,7 +58,6 @@ public class CalculatorGraphics extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -155,14 +156,6 @@ public class CalculatorGraphics extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu1.setText("Help");
-
-        jMenuItem3.setText("Help Content");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setText("About Me");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -295,14 +288,18 @@ public class CalculatorGraphics extends javax.swing.JFrame {
             this.calculator = null;
             
             if (jRadioButton1.isSelected()) {
+                Validate.isAClassValid(maskAddress);
                 calculator = new CalculatorA(ipAddress, maskAddress);
+                
             } else if (jRadioButton2.isSelected()) {
+                Validate.isBClassValid(maskAddress);
                 calculator = new CalculatorB(ipAddress, maskAddress);
             } else {
+                Validate.isCClassValid(maskAddress);
                 calculator = new CalculatorC(ipAddress, maskAddress);
             }
             
-        } catch (Exception e) {
+        } catch (DataInvalidException | NetworkClassInvalidException e) {
             jTextField3.setText(e.getMessage());
             jTextField4.setText(e.getMessage());
             jTextField5.setText(e.getMessage());
@@ -333,16 +330,12 @@ public class CalculatorGraphics extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        HelpContent.main(null);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
     // this JMenuItem read the file.
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        ICalculator calculator = File.readFile();
+        ICalculator calculatorRead = File.readFile();
         
-        jTextField1.setText(calculator.getIpAddress());
-        jTextField2.setText(calculator.getMaskAddress());
+        jTextField1.setText(calculatorRead.getIpAddress());
+        jTextField2.setText(calculatorRead.getMaskAddress());
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
@@ -396,7 +389,6 @@ public class CalculatorGraphics extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;

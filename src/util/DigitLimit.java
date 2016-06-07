@@ -32,7 +32,7 @@ public class DigitLimit extends PlainDocument {
         int total = getLength() + str.length();
         
         if (total <= maxNumber) {
-            super.insertString(offs, str, a);
+            super.insertString(offs, str.replaceAll("^[a-zA-Z]", ""), a);
             return;
         }
         
